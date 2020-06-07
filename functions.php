@@ -14,6 +14,8 @@ function arkonsoft_register_scripts() {
     wp_enqueue_script( 'theme-js', get_template_directory_uri() . '/assets/js/theme.js', array(
         'jquery',
         'wp-blocks',
+        'wp-editor',
+        'wp-components',
         'wp-i18n',
         'wp-element',
         'popper',
