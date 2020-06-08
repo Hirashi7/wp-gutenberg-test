@@ -25,9 +25,27 @@ function arkonsoft_register_scripts() {
 
 add_action( 'init', 'arkonsoft_register_scripts' );
 
+function arkonsoft_gutenberg_category($categories, $post) {
+    return array_merge(
+        $categories, [
+            [
+                'slug' => 'arkonsoft-blocks',
+                'title' => 'Arkonsoft'
+            ]
+        ]
+    );
+}
+
+add_filter( 'block_categories', 'arkonsoft_gutenberg_category', 10, 2);
+
+
 function arkonsoft_gutenberg_blocks() {
 
     register_block_type( 'arkonsoft/section', array(
+        'editor_script' => 'theme-js1'
+    ) );
+
+    register_block_type( 'arkonsoft/cta', array(
         'editor_script' => 'theme-js1'
     ) );
     
