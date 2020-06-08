@@ -3,9 +3,10 @@ const {
     RichText,
     InspectorControls,
     ColorPalette,
+    MediaUpload
 } = wp.blockEditor;
 
-const { PanelBody } = wp.components;
+const { PanelBody, IconButton } = wp.components;
 
 registerBlockType('arkonsoft/section', {
     title: 'Section',
@@ -27,6 +28,10 @@ registerBlockType('arkonsoft/section', {
         bgColor: {
             type: 'string',
             default: 'transparent'
+        },
+        bgImage: {
+            type: 'string',
+            default: null,
         }
     },
 
@@ -34,7 +39,8 @@ registerBlockType('arkonsoft/section', {
         const {
             heading, 
             body,
-            bgColor
+            bgColor,
+            bgImage
         } = attributes;
 
         function onChangeHeading(val) {
@@ -49,17 +55,45 @@ registerBlockType('arkonsoft/section', {
             setAttributes( { bgColor: val } );
         }
 
+        function onChangeBgImage(image) {
+            setAttributes( { bgImage: image.sizes.full.url } );
+        }
+
         return ([
             <InspectorControls style={{marginBottom: '40px'}}>
                 <PanelBody title={ 'Colors' }>
-                <p><strong>Choose background color</strong>:</p>
-                <ColorPalette 
-                    value={bgColor}
-                    onChange={onChangeBgColor}
-                 />
+                    <p><strong>Choose background color</strong>:</p>
+                    <ColorPalette 
+                        value={bgColor}
+                        onChange={onChangeBgColor}
+                    />
+                 </PanelBody>
+                 <PanelBody title={ 'Background image' }>
+                    <p><strong>Choose background image</strong>:</p>
+                    <MediaUpload 
+                        onSelect={ onChangeBgImage }
+                        type="image"
+                        value={ bgImage }
+                        render={ ({ open }) => (
+                            <IconButton
+                                onClick={ open }
+                                icon="upload"
+                                className="editor-media-placeholder__button is-button is-default is-large"
+                            >
+                                Background Image 
+                            </IconButton>
+                         ) }    
+                    />
                  </PanelBody>
             </InspectorControls>,
-            <div style={{backgroundColor: bgColor}}>
+            <div style={
+                {
+                    backgroundColor: bgColor, 
+                    backgroundImage: `url(${bgImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }}>
                 <RichText
                     key="editable"
                     tagName="h2"
@@ -82,11 +116,20 @@ registerBlockType('arkonsoft/section', {
         const {
             heading, 
             body,
-            bgColor
+            bgColor,
+            bgImage             
         } = attributes;
         
         return (
-            <section style={{backgroundColor: bgColor}}>
+            <section style={
+                    {
+                        backgroundColor: bgColor, 
+                        backgroundImage: `url(${bgImage})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat'
+                    }
+                }>
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
